@@ -7,7 +7,7 @@ int sum(int a, int b)
 
 
 
-Which one would you use :
+Which one would you use and why:
 
 A.
 int sum(int a, int b)  
@@ -19,9 +19,6 @@ int sum(int a, int b)
 B.
 int sum(int a, int b)  
 { 
-    int s = a ^ b; 
-    int carry = a & b; 
-  
     if (a & b == 0) 
       return a ^ b; 
     else 
@@ -34,4 +31,11 @@ int sum(int a, int b)
     return printf("%*c%*c", a, '\r', b, '\r'); 
 }
 
-B because if are looking for obfuscated C code contest it is here ioccc.org
+
+1. It is B 
+Even B is not that straight forward, but at least it gives ideas about bitwise logic 
+you have to refresh C/C++ binary opereation for B 
+
+2.
+A and C are smart and look like hacks 
+if are looking for obfuscated C code contest it is here ioccc.org
