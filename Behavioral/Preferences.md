@@ -31,8 +31,9 @@ int sum(int a, int b)
     return printf("%*c%*c", a, '\r', b, '\r'); 
 }
 
+They all are working:
 
-1. It is B 
+1. B would be my choice
 Even B is not that straight forward, but at least it gives ideas about bitwise logic 
 you have to refresh C/C++ binary opereation for B 
 
