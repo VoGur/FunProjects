@@ -1,0 +1,2 @@
+ShufflingCode
+C++ code compiled and tested in VS2017. One of the places where I went asked me for a code which would implement shuffling in C++. After checking details on internet and implementing my own code based on Fisher–Yates shuffle, I relaized that the best would be to use STD shuffle, so here is the warpper which was sent to the employer. Got interview after that and they told me this is what they expected : do not invent the wheels, unless specifically asked. Shuffling implemented and built in in all th
