@@ -1,7 +1,8 @@
 Explain Big O "in plain english".
-A way to explain how solution performance and/or memory allocation depend on number of elements. 
+Big o is a way to explain how solution performance and/or memory allocation depend on number of elements. 
 
-O(1)
+O(1) 
+algorithm doesn't depend on number of processed elements - constant time
 
 action()
 or
@@ -9,19 +10,19 @@ action();action();action()
 
 
 O(n)
-
-for ( int i = 1 ; i<n; i++)\{
+The algorithm has linear dependency on number of processed elements
+for ( int i = 1 ; i<n; i++){
  action()
-\}
+}
 
 
 O(LogM(n))
-
-for ( int i = 1 ; i<n; i=i*M)\{
+The algorithm has logarithmic dependency on number of processed elements
+for ( int i = 1 ; i<n; i=i*M){
  action();
-\}
+}
 
-NOTE: where M is base, say for 2
+NOTE: M is base, say for 2   Log2
 -----------------
 i       iterations
 -----------------
@@ -29,24 +30,34 @@ i       iterations
 4       2
 8       3
 16      4
+32      5
 ....
-1024    16
+1024    10
 
+
+O(n*LogM(n))
+The algorithm has n*logarithmic dependency on number of processed elements
+Combination of 2 cases above:
+for ( int y = 1 ; y<n; y++){
+	for ( int i = 1 ; i<n; i=i*M){
+ 		action();
+	}
+}
 
 O(n^2) 
-
-for ( int i = 1 ; i<n; i++)\{
-	for ( int y = 1 ; y<n; y++)\{
+The algorithm has "squared" dependency on number of processed elements
+for ( int i = 1 ; i<n; i++){
+	for ( int y = 1 ; y<n; y++){
 	  action();
-	\}
-\}
+	}
+}
 
 O(n^3) 
-
-for ( int i = 1 ; i<n; i++)\{
-	for ( int j = 1 ; j<n; j++)\{
-		for ( int y = 1 ; y<n; y++)\{
+The algorithm has "cubed" dependency on number of processed elements
+for ( int i = 1 ; i<n; i++){
+	for ( int j = 1 ; j<n; j++){
+		for ( int y = 1 ; y<n; y++){
 		  action();
-		\}
-	\}
-\}
+		}
+	}
+}
