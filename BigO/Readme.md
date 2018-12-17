@@ -17,6 +17,7 @@ O(LogM(n))
 for ( int i = 1 ; i<n; i=i*M){
  action();
 }
+
 NOTE:
 where M is base, say for 2
 -----------------
