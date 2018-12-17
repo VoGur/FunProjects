@@ -12,11 +12,22 @@ Cut-off 16 for switching from quick sort to insertion sort,
 and 2*logN for switching from quick sort to heap sort chosen 
 empirically as an approximate because of various tests and researches conducted.
 
+Average O(n * log n).
+Worst case O(n * log n).
+Best case O(n * log n).
+Space O(log n)
+
 
 Python  and Java non primitives sort()
 --------------------------------------------
 using
-"Timsort" which is combination of mergesort and insertion sort
+"Timsort" which is combination of mergesort and insertion sort ( see below)
+
+Average O(n * log n).
+Worst case O(n * log n).
+Best case O(n).
+Space O(n)
+
 NOTE:
 For primitives Java uses optimized quicksort ( below)
 
@@ -38,7 +49,6 @@ Better performance for data allocated in memory than in "Merge"
 Best O(n * log n).
 Average O(n * log n).
 Worst case O(n^2)
-Space O(log n)
 
 
 "Merge" 
