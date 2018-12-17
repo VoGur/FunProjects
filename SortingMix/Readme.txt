@@ -1,9 +1,9 @@
 Both: .NET C# sort() and C++ STL  std::sort() 
 ------------------------------------------
 using a 3-part hybrid sorting algorithm: 
-introsort which is quicksort and heap sort hybrid plus insertion sort for small datasets.
+"Introsort" or "Introspective sort" which is quicksort and heap sort hybrid plus insertion sort for small datasets.
 The implementation required to be O(n log n) in complexity and is not not required to be stable.
-Introsoft or introspective logic :
+Logic as follows:
 If the partition size is fewer than 16 elements, it uses an insertion sort algorithm.
 If the number of partitions exceeds 2 * LogN, where N is the range of the input array, it uses a Heapsort algorithm.
 Otherwise, it uses a Quicksort algorithm.
