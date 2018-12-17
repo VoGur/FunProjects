@@ -1,5 +1,5 @@
 Explain Big O "in plain english".
-Big o is a way to explain how solution performance and/or memory allocation depend on number of elements. 
+Big O notation is a way to explain how solution performance and/or memory allocation depend on number of elements. 
 
 O(1) 
 algorithm doesn't depend on number of processed elements - constant time
