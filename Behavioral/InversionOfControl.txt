@@ -1,0 +1,39 @@
+From Martin Fowler article: 
+https://martinfowler.com/articles/injection.html#InversionOfControl
+ 
+Early user interfaces were controlled by the application program. 
+You would have a sequence of commands like "Enter name", "enter address"; 
+your program would drive the prompts and pick up a response to each one.
+
+With graphical (or even screen based) UIs the UI framework would contain 
+this main loop and your program instea
+d provided event handlers for the various fields on the screen. 
+The main control of the program was inverted, moved away from you to the framework.
+
+
+For example, in a script menu, you would force user to follow sequence of action you programmed:
+
+print "Enter prm1"
+read prm1
+print "Enter prm2"
+read prm2
+....
+print "Enter prmN"
+read prmN
+...
+do something /check something for 
+....
+Next menue
+
+controlling the flow of user interaction.
+
+In a GUI program it is a user who controls the flow:
+
+when the user types in field Prm1 , store it in Prm1
+when the user types in field Prm2, store it in Prm2
+when the user types in field PrmN,  store it in PrmN
+
+when all entered or when the user clicks clicks "Save",
+ 
+So now control is inverted... instead of the computer accepting user input in a fixed order, 
+the user controls the order in which the data is entered, and when the data can be saved.
