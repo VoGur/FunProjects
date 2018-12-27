@@ -39,8 +39,12 @@ So now control is inverted... instead of the computer accepting user input in a 
 the user controls the order in which the data is entered, and when the data can be saved.
 
 Kyle Simpson example with Callbacks
-There's part of my program that I'm in control of executing. And then, there's another portion of my code that I'm not in control of executing.
-And the way that we express that is to take the first half of my program that executes now and the second half of my code that executes in the callback, and when I give that call back to somebody else. That's what inverts the control and it puts them in control of when and in what manner to execute the second half of my program.
-You did not realize that there was a trust point when you passed in a callback. When you passed in a callback you are trusting that that callback will be not called too many times or too few times or not called at all.
+There's part of my program that I'm in control of executing. And then, there's another portion of my code that 
+I'm not in control of executing.
+And the way that we express that is to take the first half of my program that executes now and the second half 
+of my code that executes in the callback, and when I give that call back to somebody else. That's what inverts the control 
+and it puts them in control of when and in what manner to execute the second half of my program.
+You did not realize that there was a trust point when you passed in a callback. When you passed in a callback 
+you are trusting that that callback will be not called too many times or too few times or not called at all.
 
 
