@@ -1,0 +1,492 @@
+S.O.L.I.D. design principles.
+----------------------------------------
+S: Single Responsibility Principle (SRP)
+O: Open-Closed Principle (OCP)
+L: Liskov Substitution Principle (LSP)
+I: Interface Segregation Principle (ISP)
+D: Dependency Inversion Principle (DIP)
+----------------------------------------
+Cohesion refers to the degree with which elements of code belong together. 
+This means that the level of cohesion between elements is higher if they are related, and lower if they are not.
+
+Coupling is the manner of independence between modules of a programming system. This means that high coupling means 
+that modules are more dependent upon one another, and low coupling means they are less dependent.
+
+https://www.codemag.com/article/1001061
+
+
+--------------------------------------
+"S" The Single Responsibility Principle
+--------------------------------------
+Says:
+Any class must have one, and only one, reason to change. If a class has more than one reason to change,
+ it should be refactored.
+
+Following SRP  improve chances that changing one class will not impact any other classes.
+
+Followng SRL results in high-cohesion and low-coupling code, an ideal situation when changes arise 
+because it minimizes the impact any changes have on the affected code and its related modules.
+
+Original code:
+
+public class InvitationService
+{
+	public void SendInvite(string email, string firstName, string lastName)
+    {
+        //checks if name complies with the requirments
+    	if(String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName))
+        {
+         	throw new Exception("Name is not valid!");
+        }
+
+    	//check email complies with requirement
+    	if(!email.Contains("@") || !email.Contains("."))
+        {
+        	throw new Exception("Email is not valid!!");
+        }
+
+        //only after that send email
+        SmtpClient client = new SmtpClient();
+        client.Send(new MailMessage("mysite@nowhere.com", email) { Subject = "Please join me at my party!" });
+    }
+}
+
+Because it has to change for more than one reason, InvitationService is doing too much.
+
+
+Modified code: 
+
+
+public class UserNameService
+{
+    public void Validate(string firstName, string lastName)
+    {
+        if(String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName))
+        {
+            throw new Exception("The name is invalid!");
+        }
+    }
+}
+
+public class EmailService
+{
+    public void Validate(string email)
+    {
+        if (!email.Contains("@") || !email.Contains("."))
+        {
+            throw new Exception("Email is not valid!!");
+        }
+    }
+}
+
+public class InvitationService
+{
+    UserNameService _userNameService;
+    EmailService _emailService;
+
+    public InvitationService(UserNameService userNameService, EmailService emailService)
+    {
+        _userNameService = userNameService;
+        _emailService = emailService;
+    }
+    public void SendInvite(string email, string firstName, string lastName)
+    {
+        _userNameService.Validate(firstName, lastName);
+        _emailService.Validate(email);
+        SmtpClient client = new SmtpClient();
+        client.Send(new MailMessage("sitename@invites2you.com", email) { Subject = "Please join me at my party!" });
+    }
+}
+
+
+--------------------------------------
+"O" Open/Closed Principle
+--------------------------------------
+Any given software entity should be open for extension, but closed for modification.
+Let's imagine a scenario in which we are given several Rectangles and need to calculate
+the total combined area of all of them.
+
+public class Rectangle
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+}
+
+public class CombinedAreaCalculator
+{
+    public double Area(object[] shapes)
+    {
+        double area = 0;
+        foreach (var shape in shapes)
+        {
+            if (shape is Rectangle)
+            {
+                Rectangle rectangle = (Rectangle)shape;
+                area += rectangle.Width * rectangle.Height;
+            }
+        }
+        return area;
+    }
+}
+
+if another shape added
+
+public class Circle
+{
+    public double Radius { get; set; }
+}
+
+
+shape calculator has to be modified as:
+
+public class CombinedAreaCalculator
+{
+    public double Area(object[] shapes)
+    {
+        double area = 0;
+        foreach (var shape in shapes)
+        {
+            if (shape is Rectangle)
+            {
+                Rectangle rectangle = (Rectangle)shape;
+                area += rectangle.Width * rectangle.Height;
+            }
+            if (shape is Circle)
+            {
+                Circle circle = (Circle)shape;
+                area += (circle.Radius * circle.Radius) * Math.PI;
+            }
+        }
+
+        return area;
+    }
+}
+
+Modified code: 
+
+public abstract class Shape
+{
+    public abstract double Area();
+}
+
+public class Rectangle : Shape
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+    public override double Area()
+    {
+        return Width * Height;
+    }
+}
+
+public class Circle : Shape
+{
+    public double Radius { get; set; }
+    public override double Area()
+    {
+        return Radius * Radius * Math.PI;
+    }
+}
+
+public class Triangle : Shape
+{
+    public double Height { get; set; }
+    public double Width { get; set; }
+    public override double Area()
+    {
+        return Height * Width * 0.5;
+    }
+}
+
+public class CombinedAreaCalculator
+{
+    public double Area(Shape[] shapes)
+    {
+        double area = 0;
+        foreach (var shape in shapes)
+        {
+            area += shape.Area();
+        }
+        return area;
+    }
+}
+
+
+--------------------------------------
+"L" Liskov Substitution Principle
+--------------------------------------
+States that we should be able to treat a child class as though it were the parent class. 
+Essentially this means that all derived classes should retain the functionality of their 
+parent class and cannot replace any functionality the parent provides.
+This principle aims to keep functionality intact. It's main purpose is to guarantee that objects 
+lower in a relational hierarchy can be treated as though they are objects higher in the hierarchy. 
+Basically, any child class should be able to do anything the parent can do.
+
+Popular example :Ellipse/circle or square-rectangle problem
+
+public class Ellipse
+{
+    public double MajorAxis { get; set; }
+    public double MinorAxis { get; set; }
+
+    public virtual void SetMajorAxis(double majorAxis)
+    {
+        MajorAxis = majorAxis;
+    }
+
+    public virtual void SetMinorAxis(double minorAxis)
+    {
+        MinorAxis = minorAxis;
+    }
+
+    public virtual double Area()
+    {
+        return MajorAxis * MinorAxis * Math.PI;
+    }
+}
+
+public class Circle : Ellipse
+{
+    public override void SetMajorAxis(double majorAxis)
+    {
+        base.SetMajorAxis(majorAxis);
+        this.MinorAxis = majorAxis; //In a cirle, each axis is identical
+    }
+}
+
+We still allowed to set both axes, attempting to calculate the area gives the wrong result.
+Circle circle = new Circle();
+circle.SetMajorAxis(5);
+circle.SetMinorAxis(4);
+var area = circle.Area(); //5*4*PI = 20*PI, but we expected 5*5*PI = 25*PI
+
+
+Options  to replace with:
+1.
+Hack like:
+public class Circle : Ellipse
+{
+    public override void SetMajorAxis(double majorAxis)
+    {
+        base.SetMajorAxis(majorAxis);
+        this.MinorAxis = majorAxis; //In a cirle, each axis is identical
+    }
+
+    public override void SetMinorAxis(double minorAxis)
+    {
+        base.SetMinorAxis(minorAxis);
+        this.MajorAxis = minorAxis;
+    }
+
+    public override double Area()
+    {
+        return base.Area();
+    }
+}
+
+2.
+Have separate class:
+public class Circle
+{
+    public double Radius { get; set; }
+    public void SetRadius(double radius)
+    {
+        this.Radius = radius;
+    }
+
+    public double Area()
+    {
+        return this.Radius * this.Radius * Math.PI;
+    }
+}
+--------------------------------------
+"I" Interface Segregation Principle
+--------------------------------------
+No client code object should be forced to depend on methods it does not use. 
+Basically, each code object should only implement what it needs
+
+Allows to reduce code objects down to their smallest possible implementation, 
+and removing dependencies the object doesn't need to function properly.
+
+clothing store that sells jeans. At the moment, that's all they will sell. 
+Now we think that we should model this so that if the store wants to sell 
+different products in the future, we can model them appropriately. 
+
+So, we create an interface for the products and a class for Jeans:
+public interface IProduct
+{
+    int ID { get; set; }
+    double Weight { get; set; }
+    int Stock { get; set; }
+    int Inseam { get; set; }
+    int WaistSize { get; set; }
+}
+
+public class Jeans : IProduct
+{
+    public int ID { get; set; }
+    public double Weight { get; set; }
+    public int Stock { get; set; }
+    public int Inseam { get; set; }
+    public int WaistSize { get; set; }
+}
+
+An inseam or waist size are too Jeans specific
+ 
+
+Modified code: 
+
+
+public interface IProduct
+{
+    int ID { get; set; }
+    double Weight { get; set; }
+    int Stock { get; set; }
+}
+
+public interface IJeans
+{
+    public int Inseam { get; set; }
+    public int WaistSize { get; set; }
+}
+
+public interface IHat
+{
+    public int HatSize { get; set; }
+}
+
+public interface IJacket
+{
+    public int JacketSize { get; set; }
+}
+
+public class Jeans : IProduct, IJeans
+{
+    public int ID { get; set; }
+    public double Weight { get; set; }
+    public int Stock { get; set; }
+    public int Inseam { get; set; }
+    public int WaistSize { get; set; }
+}
+
+public class BaseballCap : IProduct, IHat
+{
+    public int ID { get; set; }
+    public double Weight { get; set; }
+    public int Stock { get; set; }
+    public int HatSize { get; set; }
+}
+
+
+public class BaseballCap : IProduct, IJacket
+{
+    public int ID { get; set; }
+    public double Weight { get; set; }
+    public int Stock { get; set; }
+    public int HatSize { get; set; }
+}
+
+--------------------------------------
+"D" Dependency Inversion Principle
+--------------------------------------
+
+Says:
+1.High-level modules should not depend on low-level modules. Both should depend on abstractions.
+2.Abstractions should not depend on details. Details should depend on abstractions.
+
+This principle is primarily concerned with reducing dependencies amongst the code modules.
+
+Original code:
+
+public class Email
+{
+    public string ToAddress { get; set; }
+    public string Subject { get; set; }
+    public string Content { get; set; }
+    public void SendEmail()
+    {
+        //Send email
+    }
+}
+
+public class SMS
+{
+    public string PhoneNumber { get; set; }
+    public string Message { get; set; }
+    public void SendSMS()
+    {
+        //Send sms
+    }
+}
+
+public class Notification
+{
+    private Email _email;
+    private SMS _sms;
+    public Notification()
+    {
+        _email = new Email();
+        _sms = new SMS();
+    }
+
+    public void Send()
+    {
+        _email.SendEmail();
+        _sms.SendSMS();
+    }
+}
+The Notification class, a higher-level class, has a dependency on both the Email class 
+and the SMS class, which are lower-level classes. In other words, Notification is depending on 
+the concrete implementation of both Email and SMS, not an abstraction of said implementation.
+
+Modified code: 
+breaks functionality above as follows
+
+public interface IMessage
+{
+    void SendMessage();
+}
+
+public class Email : IMessage
+{
+    public string ToAddress { get; set; }
+    public string Subject { get; set; }
+    public string Content { get; set; }
+    public void SendMessage()
+    {
+        //Send email
+    }
+}
+
+public class SMS : IMessage
+{
+    public string PhoneNumber { get; set; }
+    public string Message { get; set; }
+    public void SendMessage()
+    {
+        //Send sms
+    }
+}
+
+public class Notification
+{
+    private ICollection<IMessage> _messages;
+
+    public Notification(ICollection<IMessage> messages)
+    {
+        this._messages = messages;
+    }
+    public void Send()
+    {
+        foreach(var message in _messages)
+        {
+            message.SendMessage();
+        }
+    }
+}
+all Notification cares about is that there's an abstraction (the interface 
+that can actually send the notification, 
+so it just calls that and calls it a day.
+
+In short, we have allowed both high-level and low-level classes to rely on abstractions,
+ thereby upholding the Dependency Inversion Principle.
