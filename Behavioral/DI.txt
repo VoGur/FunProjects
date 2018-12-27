@@ -1,0 +1,16 @@
+I like James Shore definition " 'Dependency Injection' is a 25-dollar term for a 5-cent concept..."
+https://www.jamesshore.com/Blog/Dependency-Injection-Demystified.html
+"Dependency injection means giving an object its instance variables. Really. That's it."
+
+In more details:
+When writing a class, it makes use of other objects. 
+You may have a database connection, logger, some other service that you use. 
+These other objects (or services) are dependencies.
+The simplest way to write the code is simply to create and use those other objects.
+But this means your object has an inflexible relationship to those dependencies:
+ no matter why you are invoking your object, it uses the same dependencies.
+
+A more powerful technique is to be able to create your object and provide it with dependencies to use. 
+So you might create a database connection to use, then hand it to your object. 
+This way, you can create your object with different dependencies at different times,
+ making your object more flexible. This is dependency injection, where you "inject" the dependencies into the object.
